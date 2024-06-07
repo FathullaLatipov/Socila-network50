@@ -34,3 +34,60 @@ def register_user(name, email, phone_number, password, user_city=None, birthday=
     else:
         checker
 
+
+# DarkPrice
+# Логин        hello@gmail.com, DarkPrice
+def login_user(email, password):
+    db = next(get_db())
+    user_email = db.query(User).filter_by(email=email).first()  # hello@gmail.com
+    # user_password = db.query(User).filter_by(password=password).first()
+    print(user_email)
+    if user_email:
+        if user_email.password == password:
+            return user_email.id
+        else:
+            return 'Неправильные данные(('
+    else:
+        return 'Нету такого email'
+
+
+# Получение данных определенного пользователя
+# profile/3
+def get_profile_db(user_id):
+    db = next(get_db())
+    user_info = db.query(User).filter_by(user_id=user_id).first()
+    if user_info:
+        return user_info
+    return False
+
+
+# Изменения данных пользователя   email         hello2@gmail.com
+def change_user_data_db(user_id, change_info, new_info):
+    db = next(get_db())
+    user = db.query(User).filter_by(user_id=user_id).first()
+    if user:
+        try:
+            if change_info == 'name':
+                user.name = new_info
+                db.commit()
+                return 'Success changed'
+            elif change_info == 'city':
+                user.city = new_info
+                db.commit()
+                return 'Success changed'
+            # ОСТАЛЬНЫЕ ПОЛЯ ВАМ ДЗ!!!
+        #     МНЕ ДЗ Сделать валидацию для email если есть такой email то ошибка либо что то
+        except:
+            return 'Нету такого значения для изменения'
+    return False
+
+
+# Удаления пользователя Logout
+def delete_user_db(user_id):
+    db = next(get_db())
+    user = db.query(User).filter_by(user_id=user_id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return 'Success deleted'
+    return False
