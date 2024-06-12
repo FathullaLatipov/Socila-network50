@@ -2,6 +2,28 @@ from database.models import User
 from database import get_db
 from datetime import datetime
 
+from jose import JWTError, jwt
+from datetime import timedelta
+
+from main import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+
+
+def create_access_token(data: dict):
+    expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    data.update({"exp": expire})
+    encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+
+    return encoded_jwt
+
+
+# проврка токена
+def verify_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        return None
+
 
 # Проверка наличия имени,номера и тд
 def check_user_db(name, email, phone_number):
