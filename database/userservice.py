@@ -75,8 +75,14 @@ def change_user_data_db(user_id, change_info, new_info):
                 user.city = new_info
                 db.commit()
                 return 'Success changed'
-            # ОСТАЛЬНЫЕ ПОЛЯ ВАМ ДЗ!!!
-        #     МНЕ ДЗ Сделать валидацию для email если есть такой email то ошибка либо что то
+            elif change_info == 'email':
+                user = db.query(User).filter_by(email=new_info).first()
+                if user:
+                    return 'This email is already in use'
+                else:
+                    user.email = new_info
+                    db.commit()
+                    return 'Success changed!'
         except:
             return 'Нету такого значения для изменения'
     return False
