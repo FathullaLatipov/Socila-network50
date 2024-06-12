@@ -113,13 +113,31 @@ def get_recommend_hashtag(size, hashtag_name):
     return posts
 
 # ДЗ!!!!
-# Получить определенного хэштега
-# def get_exact_hashtag()
+# Получение определенного хэштега
+def get_exact_hashtag(hashtag_name):
+    db = next(get_db())
+    exact_hashtag = db.query(Hashtags).filter_by(hashtag_name=hashtag_name).first()
+    if exact_hashtag:
+        return exact_hashtag
+    return 'Нет такого хэштега'
 
-# Получить все хэштешги
-# def get_all_hashtags()
 
-# Удалить определенного хэштега
-# def delete_exact_hashtag()
+# Получить все хэштеги
+def get_all_hashtags():
+    db = next(get_db())
+    hashtags = db.query(Hashtags).all()
+    return hashtags
+
+
+# Удаление определенного хэштега
+def delete_exact_hashtag(hashtag_name):
+    db = next(get_db())
+    delete_hashtag = db.query(Hashtags).filter_by(hashtag_name=hashtag_name).first()
+    if delete_hashtag:
+        db.delete(delete_hashtag)
+        db.commmit()
+        return 'Хэштег удален'
+    return 'Нет такого хэштега :('
+
 
 # Внутри userservice.py дописать изменения данных пользователя например password,... кроме email!!
