@@ -1,19 +1,7 @@
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean, Float
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel
 
 from database import Base
-
-
-class UserModel(BaseModel):
-    username: str  # Admin
-    password: str  # 1234
-    hashed_password: str  # SFuf4892bOSdfsb8!sdfoi
-
-
-class Token(BaseModel):
-    access_token: str  # DFfsdfibsfb923f92fbeg
-    token_type: str  # Bearer
 
 
 # Таблица пользователя

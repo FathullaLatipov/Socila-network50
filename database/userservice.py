@@ -2,28 +2,6 @@ from database.models import User
 from database import get_db
 from datetime import datetime
 
-from jose import JWTError, jwt
-from datetime import timedelta
-
-from main import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-
-
-def create_access_token(data: dict):
-    expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    data.update({"exp": expire})
-    encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
-
-    return encoded_jwt
-
-
-# проврка токена
-def verify_token(token: str):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except JWTError:
-        return None
-
 
 # Проверка наличия имени,номера и тд
 def check_user_db(name, email, phone_number):
@@ -42,7 +20,7 @@ def check_user_db(name, email, phone_number):
 
 
 # Регистрация пользователя
-def register_user(name, email, phone_number, password, user_city=None, birthday=None, status=None):
+def register_user_db(name, email, phone_number, password, user_city=None, birthday=None, status=None):
     db = next(get_db())
     checker = check_user_db(name, email, phone_number)
     if checker:
@@ -66,7 +44,7 @@ def login_user(email, password):
     print(user_email)
     if user_email:
         if user_email.password == password:
-            return user_email.id
+            return user_email
         else:
             return 'Неправильные данные(('
     else:
@@ -75,18 +53,18 @@ def login_user(email, password):
 
 # Получение данных определенного пользователя
 # profile/3
-def get_profile_db(user_id):
+def get_profile_db(id):
     db = next(get_db())
-    user_info = db.query(User).filter_by(user_id=user_id).first()
+    user_info = db.query(User).filter_by(id=id).first()
     if user_info:
         return user_info
     return False
 
 
 # Изменения данных пользователя   email         hello2@gmail.com
-def change_user_data_db(user_id, change_info, new_info):
+def change_user_data_db(id, change_info, new_info):
     db = next(get_db())
-    user = db.query(User).filter_by(user_id=user_id).first()
+    user = db.query(User).filter_by(id=id).first()
     if user:
         try:
             if change_info == 'name':
@@ -111,9 +89,9 @@ def change_user_data_db(user_id, change_info, new_info):
 
 
 # Удаления пользователя Logout
-def delete_user_db(user_id):
+def delete_user_db(id):
     db = next(get_db())
-    user = db.query(User).filter_by(user_id=user_id).first()
+    user = db.query(User).filter_by(id=id).first()
     if user:
         db.delete(user)
         db.commit()
