@@ -22,6 +22,7 @@ user_router = APIRouter(tags=['Управления юзерами'], prefix='/u
 
 
 # Регистрация
+# Я должен отсюда взять и переписать на register_user_db ДЗ!!
 @user_router.post('/api/registration')
 async def register_user(validator: UserValidator):
     db = next(get_db())

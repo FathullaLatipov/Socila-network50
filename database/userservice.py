@@ -20,6 +20,7 @@ def check_user_db(name, email, phone_number):
 
 
 # Регистрация пользователя
+# Я должен отсюда взять и переписать на register_user_db ДЗ!!
 def register_user_db(name, email, phone_number, password, user_city=None, birthday=None, status=None):
     db = next(get_db())
     checker = check_user_db(name, email, phone_number)
