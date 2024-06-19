@@ -19,6 +19,22 @@ def get_exact_post_db(id: int):
     return 'Нету такого поста('
 
 
+# Получить комментарии определенного поста
+def exact_post_comment_db(post_id):
+    db = next(get_db())
+    exact_comment = db.query(Comment).filter_by(post_id=post_id).all()
+    if exact_comment:
+        return exact_comment
+    return False
+
+
+# Получить все комменты
+def get_all_comments_db():
+    db =next(get_db())
+    comments = db.query(Comment).all()
+    return comments
+
+
 # Изменить определенный пост
 def change_post_db(id, new_text):
     db = next(get_db())
@@ -42,12 +58,12 @@ def delete_post_db(id):
 
 
 # Добавления поста
-def add_post_db(user_id, id, main_text, descriptions, hashtag=None):
+def add_post_db(user_id, main_text, descriptions, hashtag=None):
     db = next(get_db())
     if user_id:
-        new_post = UserPost(user_id=user_id, id=id, main_text=main_text,
+        new_post = UserPost(user_id=user_id, main_text=main_text,
                             descriptions=descriptions, reg_date=datetime.now(),
-                            hastag=hashtag
+                            hashtag=hashtag
                             )
         db.add(new_post)
         db.commit()
@@ -107,9 +123,9 @@ def add_hashtag(hashtag_name):
 
 
 # Рекомендация исходя из хэштега  Обьяснить на след уроке ученикам
-def get_recommend_hashtag(size, hashtag_name):
+def get_recommend_hashtag_db(size, hashtag):
     db = next(get_db())
-    posts = db.query(UserPost).filter_by(hashtag_name=hashtag_name).limit(size).all()
+    posts = db.query(UserPost).filter_by(hashtag=hashtag).limit(size).all()
     return posts
 
 # ДЗ!!!!
