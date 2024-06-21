@@ -14,7 +14,7 @@ def add_photo_db(post_id, photo_path):
 
 
 # Вернуть все изображения
-def get_all_photos():
+def get_all_photos_db():
     db = next(get_db())
     all_photos = db.query(PostPhoto).all()
     return all_photos
